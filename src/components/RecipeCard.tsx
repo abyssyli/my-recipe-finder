@@ -5,6 +5,7 @@ import { Recipe } from "@/lib/mealdb";
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { toggleSaveRecipe, isRecipeSaved } from "@/app/actions";
+import { useRouter } from "next/navigation";
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -15,6 +16,7 @@ interface RecipeCardProps {
 export default function RecipeCard({ recipe, isSaved: initialIsSaved, onSaveToggle }: RecipeCardProps) {
   const [isSaved, setIsSaved] = useState(initialIsSaved || false);
   const { isSignedIn } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     async function checkSavedStatus() {
@@ -47,8 +49,12 @@ export default function RecipeCard({ recipe, isSaved: initialIsSaved, onSaveTogg
     }
   };
 
+  const handleClick = () => {
+    router.push(`/recipe/${recipe.idMeal}`);
+  };
+
   return (
-    <div className="apple-card group cursor-pointer bg-white">
+    <div onClick={handleClick} className="apple-card group cursor-pointer bg-white">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <Image
           src={recipe.strMealThumb}
