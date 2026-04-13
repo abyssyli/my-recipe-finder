@@ -7,6 +7,10 @@ export interface Recipe {
   strCategory: string;
   strArea: string;
   strInstructions: string;
+  strTags?: string;
+  strYoutube?: string;
+  strSource?: string;
+  [key: string]: string | undefined; // For dynamic ingredient/measure fields
 }
 
 export async function searchRecipes(query: string): Promise<Recipe[]> {

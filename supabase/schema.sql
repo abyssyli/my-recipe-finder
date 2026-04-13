@@ -1,14 +1,14 @@
--- 1) 启用 pgcrypto（通常 Supabase 默认可用）
+-- 1) Enable pgcrypto (usually available by default in Supabase)
 create extension if not exists pgcrypto;
 
--- 2) 核心表：saved_recipes
+-- 2) Core table: saved_recipes
 create table if not exists public.saved_recipes (
   id uuid primary key default gen_random_uuid(),
 
-  -- Clerk 用户 ID，一般是字符串，不用 uuid
+  -- Clerk User ID (string)
   user_id text not null,
 
-  -- 外部 API（TheMealDB）里的菜谱 ID
+  -- Recipe ID from TheMealDB API
   recipe_id text not null,
 
   recipe_name text not null,
@@ -16,56 +16,56 @@ create table if not exists public.saved_recipes (
   category text,
   area text,
 
-  -- 可选字段，方便后面做详情页 / 跳转
+  -- Optional fields for detail pages and redirection
   source_url text,
   youtube_url text,
 
-  -- 首页/收藏页展示时常用
+  -- Preview of instructions for home/collections page
   instructions_preview text,
 
   created_at timestamptz not null default now(),
 
-  -- 防止同一用户重复收藏同一道菜
+  -- Prevent duplicate saves for the same user and recipe
   constraint saved_recipes_user_recipe_unique unique (user_id, recipe_id)
 );
 
--- 常用索引
+-- Common indexes
 create index if not exists saved_recipes_user_id_idx
   on public.saved_recipes (user_id);
 
 create index if not exists saved_recipes_created_at_idx
   on public.saved_recipes (created_at desc);
 
--- 3) 开启 RLS（行级安全）
+-- 3) Enable RLS (Row Level Security)
 alter table public.saved_recipes enable row level security;
 
--- 4) RLS 策略 (使用 auth.jwt() ->> 'sub' 获取 Clerk 用户 ID)
--- 只允许用户查看自己的收藏
+-- 4) RLS Policies (Using auth.jwt() ->> 'sub' to get Clerk User ID)
+-- Only allow users to view their own saved recipes
 create policy "Users can view own saved recipes"
 on public.saved_recipes
 for select
 using (user_id = auth.jwt() ->> 'sub');
 
--- 只允许用户插入属于自己的收藏
+-- Only allow users to insert their own saved recipes
 create policy "Users can insert own saved recipes"
 on public.saved_recipes
 for insert
 with check (user_id = auth.jwt() ->> 'sub');
 
--- 只允许用户删除自己的收藏
+-- Only allow users to delete their own saved recipes
 create policy "Users can delete own saved recipes"
 on public.saved_recipes
 for delete
 using (user_id = auth.jwt() ->> 'sub');
 
--- 只允许用户更新自己的收藏（可选）
+-- Only allow users to update their own saved recipes (optional)
 create policy "Users can update own saved recipes"
 on public.saved_recipes
 for update
 using (user_id = auth.jwt() ->> 'sub')
 with check (user_id = auth.jwt() ->> 'sub');
 
--- 5) 可选表：search_history
+-- 5) Optional table: search_history
 create table if not exists public.search_history (
   id uuid primary key default gen_random_uuid(),
   user_id text not null,
@@ -96,7 +96,7 @@ on public.search_history
 for delete
 using (user_id = auth.jwt() ->> 'sub');
 
--- 6) 可选表：meal_plan
+-- 6) Optional table: meal_plan
 create table if not exists public.meal_plan (
   id uuid primary key default gen_random_uuid(),
   user_id text not null,
