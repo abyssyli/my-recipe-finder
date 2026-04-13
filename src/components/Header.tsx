@@ -7,31 +7,34 @@ export default function Header() {
   const { isLoaded, isSignedIn } = useAuth();
 
   return (
-    <header className="bg-white border-b sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-8">
-            <Link href="/" className="text-xl font-bold text-orange-600">
-              RecipeFinder
+    <header className="glass sticky top-0 z-50">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="flex justify-between items-center h-[52px]">
+          <div className="flex items-center space-x-10">
+            <Link href="/" className="text-[19px] font-semibold tracking-tight hover:opacity-70 transition-opacity">
+              Recipes
             </Link>
-            <nav className="hidden md:flex space-x-4 text-sm font-medium">
-              <Link href="/" className="text-gray-600 hover:text-orange-600">Home</Link>
+            <nav className="hidden md:flex items-center space-x-8 text-[12px] font-normal tracking-wide text-[#1d1d1f]/80">
+              <Link href="/" className="hover:text-[#0071e3] transition-colors">Discover</Link>
               {isLoaded && isSignedIn && (
-                <Link href="/saved" className="text-gray-600 hover:text-orange-600">Saved Recipes</Link>
+                <Link href="/saved" className="hover:text-[#0071e3] transition-colors">Collections</Link>
               )}
             </nav>
           </div>
-          <div className="flex items-center">
+          
+          <div className="flex items-center space-x-6">
             {!isLoaded ? (
-              <div className="h-8 w-8 animate-pulse bg-gray-200 rounded-full"></div>
+              <div className="h-6 w-6 animate-pulse bg-gray-200 rounded-full"></div>
             ) : !isSignedIn ? (
               <SignInButton mode="modal">
-                <button className="bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-700 transition">
+                <button className="text-[12px] font-normal text-[#0071e3] hover:underline transition-all">
                   Sign In
                 </button>
               </SignInButton>
             ) : (
-              <UserButton afterSignOutUrl="/" />
+              <div className="scale-90">
+                <UserButton afterSignOutUrl="/" />
+              </div>
             )}
           </div>
         </div>

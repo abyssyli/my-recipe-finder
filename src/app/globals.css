@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "SF Pro Display", "Inter", "Geist", system-ui, -apple-system, sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+  --apple-blue: #0071e3;
+  --apple-gray: #86868b;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Apple style button base */
+@layer components {
+  .apple-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+
+  .apple-button-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    background-color: #0071e3;
+    color: white;
+  }
+  
+  .apple-button-primary:hover {
+    background-color: #0077ed;
+  }
+  
+  .apple-button-primary:active {
+    transform: scale(0.95);
+  }
+
+  .apple-button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+    background-color: white;
+    color: #1d1d1f;
+    border: 1px solid #d2d2d7;
+  }
+  
+  .apple-button-secondary:hover {
+    background-color: #f5f5f7;
+  }
+  
+  .apple-button-secondary:active {
+    transform: scale(0.95);
+  }
+
+  /* Glassmorphism utility */
+  .glass {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Subtle card shadow */
+  .apple-card {
+    background-color: white;
+    border-radius: 1.5rem; /* 24px */
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
+    overflow: hidden;
+  }
+
+  .apple-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
 }

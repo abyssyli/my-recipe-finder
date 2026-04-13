@@ -24,32 +24,34 @@ export default async function SavedRecipesPage() {
   }));
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-[1200px] mx-auto px-6 py-16 space-y-12">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">Your Saved Recipes</h1>
-        <p className="text-gray-600">You have {recipes.length} recipes saved in your collection.</p>
+        <h1 className="text-[40px] font-bold text-[#1d1d1f] tracking-tight">Your Collections</h1>
+        <p className="text-[17px] text-[#86868b] font-medium">{recipes.length} recipes saved</p>
       </div>
 
       {recipes.length === 0 ? (
-        <div className="text-center py-24 bg-white rounded-3xl border border-gray-100 shadow-sm">
-          <div className="max-w-md mx-auto space-y-4">
-            <div className="bg-orange-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-orange-600">
+        <div className="text-center py-32 bg-white rounded-[32px] border border-[#d2d2d7]/30 shadow-sm">
+          <div className="max-w-md mx-auto space-y-6">
+            <div className="bg-[#f5f5f7] w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-[#86868b]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900">No saved recipes yet</h2>
-            <p className="text-gray-500">Start browsing and save your favorite meals to see them here!</p>
+            <div className="space-y-2">
+              <h2 className="text-[24px] font-bold text-[#1d1d1f]">Empty Collection</h2>
+              <p className="text-[#86868b] text-[17px]">Save your favorite recipes to see them here.</p>
+            </div>
             <Link 
               href="/" 
-              className="inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-orange-700 transition shadow-lg shadow-orange-200"
+              className="apple-button-primary"
             >
-              Browse Recipes
+              Start Exploring
             </Link>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
           {recipes.map((recipe) => (
             <RecipeCard 
               key={recipe.idMeal} 
