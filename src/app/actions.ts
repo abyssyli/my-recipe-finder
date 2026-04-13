@@ -117,3 +117,53 @@ export async function isRecipeSaved(recipeId: string) {
     return false;
   }
 }
+
+export async function saveSearchHistory(keyword: string) {
+  try {
+    const { userId } = await auth();
+    if (!userId || !keyword.trim()) return;
+
+    await supabaseAdmin
+      .from("search_history")
+      .insert({ user_id: userId, keyword: keyword.trim() });
+    
+    revalidatePath("/");
+  } catch (error) {
+    console.error("saveSearchHistory failed:", error);
+  }
+}
+
+export async function getSearchHistory() {
+  try {
+    const { userId } = await auth();
+    if (!userId) return [];
+
+    const { data } = await supabaseAdmin
+      .from("search_history")
+      .select("keyword")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    return Array.from(new Set(data?.map(item => item.keyword) || []));
+  } catch (error) {
+    console.error("getSearchHistory failed:", error);
+    return [];
+  }
+}
+
+export async function getCommunityRecipes() {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("saved_recipes")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(20);
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("getCommunityRecipes failed:", error);
+    return [];
+  }
+}

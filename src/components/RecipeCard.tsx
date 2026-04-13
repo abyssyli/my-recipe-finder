@@ -90,7 +90,7 @@ export default function RecipeCard({ recipe, isSaved: initialIsSaved, onSaveTogg
         </button>
       </div>
       
-      <div className="p-6">
+      <div className="p-5 md:p-6">
         <div className="flex items-center space-x-2 mb-2">
           <span className="text-[10px] font-bold uppercase tracking-wider text-[#0071e3]">
             {recipe.strCategory}
@@ -100,10 +100,10 @@ export default function RecipeCard({ recipe, isSaved: initialIsSaved, onSaveTogg
             {recipe.strArea}
           </span>
         </div>
-        <h3 className="text-[19px] font-semibold text-[#1d1d1f] leading-tight mb-2 group-hover:text-[#0071e3] transition-colors">
+        <h3 className="text-[17px] md:text-[19px] font-semibold text-[#1d1d1f] leading-tight mb-2 group-hover:text-[#0071e3] transition-colors line-clamp-1">
           {recipe.strMeal}
         </h3>
-        <p className="text-[14px] text-[#86868b] line-clamp-2 leading-relaxed">
+        <p className="text-[13px] md:text-[14px] text-[#86868b] line-clamp-2 leading-relaxed">
           {recipe.strInstructions || "Tap to see the full recipe and ingredients."}
         </p>
       </div>
