@@ -33,7 +33,7 @@ export default function Header() {
               </SignInButton>
             ) : (
               <div className="scale-90">
-                <UserButton afterSignOutUrl="/" />
+                <UserButton />
               </div>
             )}
           </div>
