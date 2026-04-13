@@ -86,11 +86,18 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
       <section className="space-y-8 max-w-[800px]">
         <h2 className="text-[32px] font-bold text-[#1d1d1f] tracking-tight">Instructions</h2>
         <div className="space-y-6">
-          {recipe.strInstructions.split('\r\n').filter(p => p.trim()).map((paragraph, index) => (
-            <p key={index} className="text-[19px] text-[#1d1d1f]/90 leading-relaxed font-normal">
-              {paragraph}
-            </p>
-          ))}
+          {recipe.strInstructions ? (
+            recipe.strInstructions
+              .split(/\r?\n|\r/)
+              .filter(p => p.trim())
+              .map((paragraph, index) => (
+                <p key={index} className="text-[19px] text-[#1d1d1f]/90 leading-relaxed font-normal">
+                  {paragraph}
+                </p>
+              ))
+          ) : (
+            <p className="text-[19px] text-[#86868b] italic">No instructions available for this recipe.</p>
+          )}
         </div>
       </section>
 
