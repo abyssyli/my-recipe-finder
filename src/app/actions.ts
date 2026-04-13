@@ -6,8 +6,11 @@ import { Recipe } from "@/lib/mealdb";
 import { revalidatePath } from "next/cache";
 
 export async function toggleSaveRecipe(recipe: Recipe) {
-  const { userId } = auth();
+  const authData = auth();
+  const { userId } = authData;
   
+  console.log("ToggleSave: Auth Data", { userId, hasSession: !!authData.sessionId });
+
   if (!userId) {
     throw new Error("Unauthorized");
   }

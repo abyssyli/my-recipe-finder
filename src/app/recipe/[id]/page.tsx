@@ -4,15 +4,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface RecipePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function RecipeDetailPage({ params }: RecipePageProps) {
-  const recipe = await getRecipeById(params.id);
+  const { id } = await params;
+  const recipe = await getRecipeById(id);
 
-  if (!recipe) {
+  if (!recipe || !recipe.idMeal) {
     notFound();
   }
 
@@ -42,13 +43,19 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
       {/* Hero Section */}
       <section className="grid md:grid-cols-2 gap-12 items-start">
         <div className="apple-card relative aspect-square w-full">
-          <Image
-            src={recipe.strMealThumb}
-            alt={recipe.strMeal}
-            fill
-            className="object-cover"
-            priority
-          />
+          {recipe.strMealThumb ? (
+            <Image
+              src={recipe.strMealThumb}
+              alt={recipe.strMeal || "Recipe Image"}
+              fill
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+              <span className="text-gray-400">No Image Available</span>
+            </div>
+          )}
         </div>
         
         <div className="space-y-8">
