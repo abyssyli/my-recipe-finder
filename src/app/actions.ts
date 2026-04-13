@@ -1,36 +1,19 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { createClerkSupabaseClient } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 import { Recipe } from "@/lib/mealdb";
 import { revalidatePath } from "next/cache";
 
-async function getSupabaseClient() {
-  const { userId, getToken } = auth();
-  
-  if (!userId) {
-    return null;
-  }
-
-  // Get Clerk JWT for Supabase RLS
-  const token = await getToken({ template: 'supabase' });
-  if (!token) {
-    return null;
-  }
-
-  return createClerkSupabaseClient(token);
-}
-
 export async function toggleSaveRecipe(recipe: Recipe) {
   const { userId } = auth();
-  const supabase = await getSupabaseClient();
   
-  if (!userId || !supabase) {
+  if (!userId) {
     throw new Error("Unauthorized");
   }
 
   // Check if already saved
-  const { data: existing } = await supabase
+  const { data: existing } = await supabaseAdmin
     .from("saved_recipes")
     .select("id")
     .eq("user_id", userId)
@@ -39,7 +22,7 @@ export async function toggleSaveRecipe(recipe: Recipe) {
 
   if (existing) {
     // Delete if exists
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("saved_recipes")
       .delete()
       .eq("user_id", userId)
@@ -48,7 +31,7 @@ export async function toggleSaveRecipe(recipe: Recipe) {
     if (error) throw error;
   } else {
     // Insert if not exists
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("saved_recipes")
       .insert({
         user_id: userId,
@@ -69,13 +52,12 @@ export async function toggleSaveRecipe(recipe: Recipe) {
 
 export async function getSavedRecipes() {
   const { userId } = auth();
-  const supabase = await getSupabaseClient();
   
-  if (!userId || !supabase) {
+  if (!userId) {
     return [];
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("saved_recipes")
     .select("*")
     .eq("user_id", userId)
@@ -91,13 +73,12 @@ export async function getSavedRecipes() {
 
 export async function isRecipeSaved(recipeId: string) {
   const { userId } = auth();
-  const supabase = await getSupabaseClient();
   
-  if (!userId || !supabase) {
+  if (!userId) {
     return false;
   }
 
-  const { data } = await supabase
+  const { data } = await supabaseAdmin
     .from("saved_recipes")
     .select("id")
     .eq("user_id", userId)
